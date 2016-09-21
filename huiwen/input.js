@@ -1,6 +1,6 @@
 // let arr=[1,2,3]
 let inputArr=[
-"coco"
+"fypypy"
 ]
 let rl=read_lineGenerator(inputArr)
 function* read_lineGenerator(inputArr){
@@ -101,8 +101,7 @@ function tryHuiwen(str){
 		}
 	}
 	var copyArr
-	// debugger
-	for(var i=0;i<len;i++){
+	for(var i=0;i<=len;i++){
 		for(var j=0;j<charArr.length;j++){
 			copyArr=[].concat(arr)
 			copyArr.splice(i,0,charArr[j])
@@ -111,15 +110,17 @@ function tryHuiwen(str){
 				print('YES')
 				return
 			}
-			if (!maybeHuiWen(copyStr)) {
-				print('NO')
-				return
-			}
+			// if (!maybeHuiWen(copyStr)) {
+			// 	print('NO')
+			// 	return
+			// }
 		}
 	}
 	print('NO')
 	return
 }
-
-tryHuiwen(read_line())
+tryHuiwen(read_line().trim())
 // isHuiWen('ococo')
+
+
+//据说将字符串反转，求最大公共子串，如果长度差距不大于1就可以，查查看
