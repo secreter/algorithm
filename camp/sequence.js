@@ -10,12 +10,7 @@
 
 function sequence(fn){
   const generate=function *(condition,result=false){
-    let i=0,x=fn(i)
-    while(condition(result?x:i)){
-      yield x
-      i++
-      x=fn(i)
-    }
+    for(let i=0,x;condition(result?x=fn(i):x=i);i++) yield x
   }
   return {
     take:(n)=>[...generate(x=>x<n)],
