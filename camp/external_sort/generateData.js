@@ -2,10 +2,12 @@
  * Created by pengchaoyang on 2018/9/10
  */
 let fs = require("fs");
+let RandomStream = require("./Number");
+//22500000
+let randomStream = new RandomStream({count:20})
 let data = '';
 
 // 创建可写流
 let writeerStream = fs.createWriteStream('data');
 
-// 设置编码为 utf8。
-writeerStream.setEncoding('UTF8');
+randomStream.pipe(writeerStream)
