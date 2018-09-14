@@ -2,14 +2,18 @@
  * Created by pengchaoyang on 2018/9/13
  */
 let fs = require("fs");
-let buffers = [],i=0,count=22500000,times=10,step=count/times,buffer
+let stream = require("stream");
+let buffers = [],i=-1,count=225000,times=10,step=count/times,buffer
 // 创建可写流
 let readerStream = fs.createReadStream('data',{highWaterMark:4 });     //22500000*4
 readerStream.on('data',(chunk)=>{
-    if(i!==0&&i++%step===0){
+    if(++i!==0&&(i%step)===0){
         console.log('pause',i,step)
-        readerStream.pause()
+        readerStream.pause()  //暂停写文件
         buffer=Buffer.concat(buffers)
+        let sortedBuf=partionSort(buffer)
+        writeToFile(sortedBuf,'partition'+i)
+        readerStream.resume()
     }
     buffers.push(chunk)
     console.log(chunk,chunk.readUInt32BE(0))
@@ -20,6 +24,7 @@ readerStream.on('end',()=>{
     console.log('end')
     buffer=Buffer.concat(buffers)
     let sortedBuf=partionSort(buffer)
+    writeToFile(sortedBuf,'partition'+'end')
     consoleNum(sortedBuf)
 
 })
@@ -56,4 +61,12 @@ function consoleNum(buf,l=30){
         list.push(buf.readUInt32BE(i*4))
     }
     console.log(list)
+}
+
+function writeToFile(buffer,filename){
+    //创建一个直通流
+    let bufferStream = new stream.PassThrough();
+    bufferStream.end(buffer);
+    let writeerStream = fs.createWriteStream(filename);
+    bufferStream.pipe(writeerStream)
 }

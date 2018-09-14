@@ -4,7 +4,7 @@
 let fs = require("fs");
 let RandomStream = require("./Number");
 //22500000
-let randomStream = new RandomStream({count:20})
+let randomStream = new RandomStream({count:2250000})
 let data = '';
 
 // 创建可写流
