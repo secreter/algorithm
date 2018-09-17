@@ -3,7 +3,7 @@
  */
 let fs = require("fs");
 let stream = require("stream");
-let buffers = [],i=-1,count=225000,times=10,step=count/times,buffer
+let buffers = [],i=-1,count=22500,times=10,step=count/times,buffer
 // 创建可写流
 let readerStream = fs.createReadStream('data',{highWaterMark:4 });     //22500000*4
 readerStream.on('data',(chunk)=>{
@@ -12,11 +12,11 @@ readerStream.on('data',(chunk)=>{
         readerStream.pause()  //暂停写文件
         buffer=Buffer.concat(buffers)
         let sortedBuf=partionSort(buffer)
-        writeToFile(sortedBuf,'partition'+i)
+        writeToFile(sortedBuf,'partition'+i/step)
         readerStream.resume()
     }
     buffers.push(chunk)
-    console.log(chunk,chunk.readUInt32BE(0))
+    // console.log(chunk,chunk.readUInt32BE(0))
 })
 // ReadStream.pause()暂停读取
 // ReadStream.resume()重新开始读取
@@ -24,9 +24,8 @@ readerStream.on('end',()=>{
     console.log('end')
     buffer=Buffer.concat(buffers)
     let sortedBuf=partionSort(buffer)
-    writeToFile(sortedBuf,'partition'+'end')
+    writeToFile(sortedBuf,'partition'+Math.ceil(i/step))
     consoleNum(sortedBuf)
-
 })
 
 /**
@@ -47,6 +46,7 @@ function partionSort (buf) {
         }
         // console.log(buf)
     }
+    consoleNum(buf)
     return buf
 }
 
@@ -55,7 +55,7 @@ function partionSort (buf) {
  * @param buf
  * @param l
  */
-function consoleNum(buf,l=30){
+function consoleNum(buf,l=50){
     let len=buf.length/4,list=[]
     for(let i=0;i<l&&i<len;i++){
         list.push(buf.readUInt32BE(i*4))
