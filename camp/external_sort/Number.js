@@ -15,7 +15,7 @@ const stream = require('stream')
     _read (size) {
         while(this.count--){
             // let buf=Buffer.from([this.rand(), this.rand(), this.rand(), this.rand()]);
-            let buf=Buffer.from([0, 0, 0, this.rand()]);
+            let buf=Buffer.from([0, 0, this.rand(), this.rand()]);
             // console.log(`size: ${buf.length} ${buf.readInt32BE(0)}`)  //大端，从从左到右读取
             // console.log( JSON.stringify(buf))
             this.push(buf, 'utf8')          // 向缓存中添加数据
