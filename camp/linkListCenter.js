@@ -1,5 +1,6 @@
 /**
- * Created by pengchaoyang on 2018/10/9
+ * Created by pengchaoyang on 2018/10/10
+ * 写一个函数center(list)找到一个链表的中间节点。 如果链表有基数个节点，那么返回中心节点。 如果链表有偶数个节点，返回中间偏左的节点
  */
 class DoubleLinkedList {
     constructor(){
@@ -55,29 +56,25 @@ class ListNode {
     }
 }
 
-const list = new DoubleLinkedList()
-list.print()
-// 输出: NULL
-for(let i = 0; i < 5; i++) {
-    list.insert( String.fromCharCode('A'.charCodeAt(0) + i) )
+function center(list){
+    let leftNode=list.head,rightNode=list.tail
+    while(leftNode&&rightNode&&leftNode!==rightNode&&leftNode.next!==rightNode){
+        leftNode=leftNode.next
+        rightNode=rightNode.prev
+    }
+    return leftNode
 }
-
-list.print()
-// // 输出: E<->D<->C<->B<->A<->NULL
-
-list.insert('X')
-list.print()
-// // 输出: X<->E<->D<->C<->B<->A<->NULL
-
-const list2 = new DoubleLinkedList()
-list2.insert('Q')
-list2.insert('P')
-list2.insert('O')
-list2.print()
-// 输出 O<->P<->Q<->NULL
-
-
-list2.merge(list)
-list2.print()
-
-// // 输出 O<->P<->Q<->X<->E<->D<->C<->B<->A<->NULL
+const list = new DoubleLinkedList()
+center(list) // null
+console.log(center(list))
+list.insert(4)
+list.insert(3)
+list.insert(2)
+list.insert(1)
+// list = 1-2-3-4
+const node = center(list) // node.key = 2
+console.log(node.key)
+list.insert(5)
+// list = 5-1-2-3-4
+const node2 = center(list) // node.key = 2
+console.log(node2.key)
