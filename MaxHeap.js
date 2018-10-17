@@ -11,9 +11,41 @@ class MaxHeap {
     this.build()
   }
 
+  //父节点: (i-1)/2 // 为负数时则说明父节点不存在
+  //左右子节点: (i*2+1) 和 (i*2+2)
   build(){
-
+    let lastIndex=this.heapSize-1,parentIndex=(lastIndex-1)>>1
+    while (parentIndex>=0){
+      let leftIndex=2*parentIndex+1
+      let rightIndex=2*parentIndex+2
+      if(this.list[leftIndex]>this.list[parentIndex]){
+        [this.list[leftIndex],this.list[parentIndex]]=[this.list[parentIndex],this.list[leftIndex]]
+        this.subRootChangeAdjust(leftIndex)
+      }
+      if(rightIndex<=lastIndex&&this.list[rightIndex]>this.list[parentIndex]){
+        [this.list[rightIndex],this.list[parentIndex]]=[this.list[parentIndex],this.list[rightIndex]]
+        this.subRootChangeAdjust(rightIndex)
+      }
+      parentIndex--
+    }
   }
+
+  subRootChangeAdjust(subRootIndex){
+    let rootIndex=subRootIndex,lastIndex=this.heapSize-1,lastSubRootIndex=(lastIndex-1)>>1
+    if (rootIndex<=lastSubRootIndex){
+      let leftIndex=2*rootIndex+1
+      let rightIndex=2*rootIndex+2
+      if(this.list[leftIndex]>this.list[rootIndex]){
+        [this.list[leftIndex],this.list[rootIndex]]=[this.list[rootIndex],this.list[leftIndex]]
+        this.subRootChangeAdjust(leftIndex)
+      }
+      if(rightIndex<=lastIndex&&this.list[rightIndex]>this.list[rootIndex]){
+        [this.list[rightIndex],this.list[rootIndex]]=[this.list[rootIndex],this.list[rightIndex]]
+        this.subRootChangeAdjust(rightIndex)
+      }
+    }
+  }
+
 
   max_heapify(i) {
     /// TODO
@@ -22,3 +54,4 @@ class MaxHeap {
 
 const heap = new MaxHeap([2,5,8,3,7,12,9,6])
 console.log(heap.list)
+// [ 12, 7, 9, 6, 5, 8, 2, 3, <9992 empty items> ]
