@@ -30,19 +30,28 @@ class MaxHeap {
     }
   }
 
-  subRootChangeAdjust(subRootIndex){
-    let rootIndex=subRootIndex,lastIndex=this.heapSize-1,lastSubRootIndex=(lastIndex-1)>>1
+  subRootChangeAdjust(subRootIndex,lastIndex=this.heapSize-1){
+    let rootIndex=subRootIndex,lastSubRootIndex=(lastIndex-1)>>1
     if (rootIndex<=lastSubRootIndex){
       let leftIndex=2*rootIndex+1
       let rightIndex=2*rootIndex+2
       if(this.list[leftIndex]>this.list[rootIndex]){
         [this.list[leftIndex],this.list[rootIndex]]=[this.list[rootIndex],this.list[leftIndex]]
-        this.subRootChangeAdjust(leftIndex)
+        this.subRootChangeAdjust(leftIndex,lastIndex)
       }
       if(rightIndex<=lastIndex&&this.list[rightIndex]>this.list[rootIndex]){
         [this.list[rightIndex],this.list[rootIndex]]=[this.list[rootIndex],this.list[rightIndex]]
-        this.subRootChangeAdjust(rightIndex)
+        this.subRootChangeAdjust(rightIndex,lastIndex)
       }
+    }
+  }
+  heap_sort(){
+    let lastIndex=this.heapSize-1
+    while (lastIndex!==0){
+      //swap last node and root node
+      [this.list[lastIndex],this.list[0]]=[this.list[0],this.list[lastIndex]]
+      lastIndex--
+      this.subRootChangeAdjust(0,lastIndex)
     }
   }
 
@@ -53,5 +62,7 @@ class MaxHeap {
 }
 
 const heap = new MaxHeap([2,5,8,3,7,12,9,6])
+console.log(heap.list)
+heap.heap_sort()
 console.log(heap.list)
 // [ 12, 7, 9, 6, 5, 8, 2, 3, <9992 empty items> ]
