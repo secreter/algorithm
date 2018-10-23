@@ -3,18 +3,17 @@
  * 写一个函数match(str)，判断一个字符串中的小括号是否匹配。
  */
 function match(str){
-  let stack=[],left=0,right=0,LEFT_CHAR='(',RIGHT_CHAR=')'
+  let stack=[],LEFT_CHAR='(',RIGHT_CHAR=')'
   for(let i=0;i<str.length;i++){
     let ch=str.charAt(i)
-    if(left>0&&ch===RIGHT_CHAR){
-      while(stack.pop()!==LEFT_CHAR);
-      left--
-    }else{
-      if(ch===LEFT_CHAR) left++
-      if(ch===RIGHT_CHAR) right++
+    if(ch===LEFT_CHAR){
       stack.push(ch)
+    }else if(ch===RIGHT_CHAR){
+      let pop=stack.pop(ch)
+      if(pop!==LEFT_CHAR) return false
     }
+    console.log(stack)
   }
-  return left===right
+  return stack.length===0
 }
-console.log(match('(1+2+3+5*2*(3+7))') )
+console.log(match('(w)())sds(') )
