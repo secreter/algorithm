@@ -168,9 +168,17 @@ class BinTree {
 
   /**
    * 层次遍历
+   * 从上到下，从左到右
    */
-  traverseLevel(){
-
+  traverseLevel(node,visit){
+    let queue=[]
+    queue.push(node)
+    while (queue.length){
+      node=queue.shift()
+      visit(node.data)
+      if(node.leftChild) queue.push(node.leftChild)       //左孩子先进先出
+      if(node.rightChild) queue.push(node.rightChild)
+    }
   }
 
   /**
@@ -202,7 +210,6 @@ class BinTree {
   /**
    * 不断地的将左侧链推入栈中
    * @param node
-   * @param visit
    * @param stack
    */
   goAlongLeftBranch(node,stack){
@@ -240,10 +247,14 @@ let n2=tree.insertAsRightChild(root,{name:'n2'})
 let n3=tree.insertAsLeftChild(n1,{name:'n3'})
 let n4=tree.insertAsRightChild(n1,{name:'n4'})
 let n5=tree.insertAsLeftChild(n2,{name:'n5'})
-tree.traversePre(root,(data)=>{
-  console.log(data.name)
-})
-console.log(root.height)
-tree.traverseIn(root,(data)=>{
+// tree.traversePre(root,(data)=>{
+//   console.log(data.name)
+// })
+// console.log(root.height)
+// tree.traverseIn(root,(data)=>{
+//   console.log(data.name)
+// })
+
+tree.traverseLevel(root,(data)=>{
   console.log(data.name)
 })
