@@ -25,7 +25,7 @@ class MinHeap {
   }
   getMin(){
     if(this.size===0) return null
-    return list[0]
+    return this.list[0]
   }
   popMin(){
     if(this.size===0) return null
@@ -35,8 +35,15 @@ class MinHeap {
     return this.list.pop()
 
   }
-  insert(pos){
 
+  /**
+   * 在最后插入
+   * @param rank
+   */
+  insert(rank){
+    this.list[this.size]=rank
+    this.siftUp(this.size)
+    this.size++
   }
   remove(pos){
 
@@ -80,3 +87,5 @@ function swap (list,i,j) {
 // while (minHeap.size>0){
 //   console.log(minHeap.popMin())
 // }
+
+module.exports= MinHeap
