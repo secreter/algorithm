@@ -237,6 +237,39 @@ class BinTree {
   traversePost(){
     //前序的镜像
   }
+
+  /**
+   * 之字形层级遍历,利用两个栈
+   * @param node
+   * @param visit
+   */
+  traverseLoopback(node,visit){
+    if(node===null) return
+    let level=0
+    let evenStack=[],oddStack=[]
+    evenStack.push(node)
+    while (evenStack.length>0||oddStack.length>0){
+      if((level&1)===0){
+        //偶数层级
+        while(evenStack.length>0){
+          let node=evenStack.pop()
+          node.leftChild&&oddStack.push(node.leftChild)           //先左孩子
+          node.rightChild&&oddStack.push(node.rightChild)
+          visit(node.data)
+        }
+      }else{
+        //奇数层级
+        while(oddStack.length>0){
+          let node=oddStack.pop()
+          node.rightChild&&evenStack.push(node.rightChild)      //先右孩子
+          node.leftChild&&evenStack.push(node.leftChild)
+          visit(node.data)
+        }
+      }
+      level++
+      console.log(' ')
+    }
+  }
 }
 
 
@@ -247,6 +280,8 @@ let n2=tree.insertAsRightChild(root,{name:'n2'})
 let n3=tree.insertAsLeftChild(n1,{name:'n3'})
 let n4=tree.insertAsRightChild(n1,{name:'n4'})
 let n5=tree.insertAsLeftChild(n2,{name:'n5'})
+let n6=tree.insertAsRightChild(n2,{name:'n6'})
+let n7=tree.insertAsLeftChild(n5,{name:'n7'})
 // tree.traversePre(root,(data)=>{
 //   console.log(data.name)
 // })
@@ -255,6 +290,9 @@ let n5=tree.insertAsLeftChild(n2,{name:'n5'})
 //   console.log(data.name)
 // })
 
-tree.traverseLevel(root,(data)=>{
+// tree.traverseLevel(root,(data)=>{
+//   console.log(data.name)
+// })
+tree.traverseLoopback(root,(data)=>{
   console.log(data.name)
 })
