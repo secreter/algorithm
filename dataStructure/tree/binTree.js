@@ -270,6 +270,11 @@ class BinTree {
       console.log(' ')
     }
   }
+
+  getDepth(node){
+    if(node===null) return 0 //递归基，哨兵，空节点深度为0
+    return Math.max(this.getDepth(node.leftChild),this.getDepth(node.rightChild))+1 // 左右子树中高度高的再加上根节点1
+  }
 }
 
 
@@ -296,3 +301,5 @@ let n7=tree.insertAsLeftChild(n5,{name:'n7'})
 tree.traverseLoopback(root,(data)=>{
   console.log(data.name)
 })
+
+console.log(tree.getDepth(root))
