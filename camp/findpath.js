@@ -22,12 +22,7 @@ function findPath (matrix,m,n,str) {
   let usedMatrix=new Array(m*n).fill(0) //同样大小的记录是否经过过的矩阵
   let foundLength=0;   //找到路径的str 前缀长度
   //遍历所有点
-  for(let i=0;i<m;i++){
-    for(let j=0;j<n;j++){
-      if(findPathCore(matrix,m,n,i,j,str,foundLength)) return true
-    }
-  }
-  return false
+
 
   function findPathCore (matrix,m,n,i,j,str) {
     if(str.length===foundLength) return true
