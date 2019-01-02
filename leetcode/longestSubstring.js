@@ -19,30 +19,53 @@
  * @param {string} s
  * @return {number}
  */
-let lengthOfLongestSubstring = function (s) {
-  let arr = Array.from(s)
-  let hash = Array(256)
-  let len = arr.length
-  let lenArr = []
-  let maxLen = 0
-  let lastIndex = 0  // 上次指针停留的位置
-  if (len === 0) {
-    return 0
-  }
-  lenArr[0] = 1  // 初始值
-  hash[arr[0].charCodeAt()] = 0    // 下标是字符ASCII码，值是arr的index
-  maxLen = 1
-  for (let i = 1; i < len; i++) {
-    // 第i位置上的字符没有出现过 或 上次出现的位置在lastIndex之前，说明在子串中没有重复
-    if (hash[arr[i].charCodeAt()] === undefined || hash[arr[i].charCodeAt()] < lastIndex) {
-      lenArr[i] = lenArr[i - 1] + 1
-    } else {
-      lenArr[i] = i - hash[arr[i].charCodeAt()]   // 和上一次出现的距离
-      lastIndex = hash[arr[i].charCodeAt()] + 1   // 更新最新指针为重复字符的下一位置
+// let lengthOfLongestSubstring = function (s) {
+//   let arr = Array.from(s)
+//   let hash = Array(256)
+//   let len = arr.length
+//   let lenArr = []
+//   let maxLen = 0
+//   let lastIndex = 0  // 上次指针停留的位置
+//   if (len === 0) {
+//     return 0
+//   }
+//   lenArr[0] = 1  // 初始值
+//   hash[arr[0].charCodeAt()] = 0    // 下标是字符ASCII码，值是arr的index
+//   maxLen = 1
+//   for (let i = 1; i < len; i++) {
+//     // 第i位置上的字符没有出现过 或 上次出现的位置在lastIndex之前，说明在子串中没有重复
+//     if (hash[arr[i].charCodeAt()] === undefined || hash[arr[i].charCodeAt()] < lastIndex) {
+//       lenArr[i] = lenArr[i - 1] + 1
+//     } else {
+//       lenArr[i] = i - hash[arr[i].charCodeAt()]   // 和上一次出现的距离
+//       lastIndex = hash[arr[i].charCodeAt()] + 1   // 更新最新指针为重复字符的下一位置
+//     }
+//     hash[arr[i].charCodeAt()] = i   // 记录 或 重新记录该字符最近一次出现的位置
+//     maxLen = lenArr[i] > maxLen ? lenArr[i] : maxLen
+//   }
+//   return maxLen
+// }
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+  let map={}     //记录字符最近一次出现的索引值
+  let maxLen=0,k=0
+  while(k<s.length){
+    for(let i=k;i<s.length;i++){
+      if(map[s[i]]===undefined){
+        map[s[i]]=i            //s[i] 在k 到i之间没有出现过
+        maxLen=i-k+1>maxLen?i-k+1:maxLen
+      }else{
+        k=map[s[i]]
+        break
+      }
     }
-    hash[arr[i].charCodeAt()] = i   // 记录 或 重新记录该字符最近一次出现的位置
-    maxLen = lenArr[i] > maxLen ? lenArr[i] : maxLen
+    k++
+    map={}
   }
   return maxLen
-}
-console.log(lengthOfLongestSubstring('cccssss'))
+};
+console.log(lengthOfLongestSubstring("pwwkew"))

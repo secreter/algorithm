@@ -45,31 +45,67 @@ var longestPalindrome = function (s) {
 }
  */
 
+// function longestPalindrome (s) {
+//   let n = s.length
+//   let pal = Array(n)
+//   let start, end
+//   for (let i = 0; i < n; i++) {
+//     pal[i] = Array(n)
+//   }
+//   // pal[i][j] 表示s[i...j]是否是回文串
+//   let maxLen = 0
+//   for (let i = 0; i < n; i++) {  // i作为终点
+//     let j = i    // j作为起点
+//     while (j >= 0) {
+//       if (s.charAt(j) === s.charAt(i) && (i - j < 2 || pal[j + 1][i - 1])) {
+//         pal[j][i] = true
+//         if (i - j + 1 > maxLen) {
+//           maxLen = i - j + 1
+//           start = j
+//           end = i
+//         }
+//       }
+//       j--
+//     }
+//   }
+//   return s.slice(start, end + 1)
+// }
+// console.time('test')
+// console.log(longestPalindrome("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"))
+// console.timeEnd('test')
+
+//注意，中心轴有2n-1个，  例如：abba
 function longestPalindrome (s) {
-  let n = s.length
-  let pal = Array(n)
-  let start, end
-  for (let i = 0; i < n; i++) {
-    pal[i] = Array(n)
-  }
-  // pal[i][j] 表示s[i...j]是否是回文串
-  let maxLen = 0
-  for (let i = 0; i < n; i++) {  // i作为终点
-    let j = i    // j作为起点
-    while (j >= 0) {
-      if (s.charAt(j) === s.charAt(i) && (i - j < 2 || pal[j + 1][i - 1])) {
-        pal[j][i] = true
-        if (i - j + 1 > maxLen) {
-          maxLen = i - j + 1
-          start = j
-          end = i
-        }
-      }
-      j--
+  let start=0,end=0
+  for(let i=0;i<s.length;i++){
+    let {left:l1,right:r1}=expandAroundCenter(s,i,i)
+    let {left:l2,right:r2}=expandAroundCenter(s,i,i+1)
+    if(r1-l1>end-start){
+      end=r1
+      start=l1
+    }
+    if(r2-l2>end-start){
+      end=r2
+      start=l2
     }
   }
-  return s.slice(start, end + 1)
+  // console.log(start,end)
+  return s.substring(start,end+1)
 }
-console.time('test')
-console.log(longestPalindrome("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"))
-console.timeEnd('test')
+
+/**
+ * 从一个中点向两边扩展
+ * @param s
+ * @param left
+ * @param right
+ */
+function expandAroundCenter (s,left,right) {
+  while (left >= 0 && right < s.length && s[left] === s[right]) {
+    left--
+    right++
+  }
+  left++
+  right--   //进入循环会多加；不进入的话，差值小于0不影响
+  return {left, right}
+}
+console.log(longestPalindrome('22abacd'))
